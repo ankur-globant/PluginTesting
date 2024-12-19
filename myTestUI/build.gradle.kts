@@ -4,9 +4,10 @@ plugins {
     id("maven-publish")
 }
 
+
 android {
-    namespace = "com.example.mytestui"
-    compileSdk = 35
+    namespace = "com.example.mytextlibrary"
+    compileSdk = 34
 
     defaultConfig {
         minSdk = 26
@@ -31,23 +32,33 @@ android {
     kotlinOptions {
         jvmTarget = "1.8"
     }
+
     buildFeatures {
         compose = true
     }
+
     composeOptions {
         kotlinCompilerExtensionVersion = "1.5.1"
     }
+
 }
 
 dependencies {
-
-    implementation(libs.androidx.core.ktx)
-    implementation(libs.androidx.appcompat)
     implementation(libs.androidx.activity.compose)
     implementation(platform(libs.androidx.compose.bom))
     implementation(libs.androidx.material3)
     implementation(libs.material)
-    testImplementation(libs.junit)
-    androidTestImplementation(libs.androidx.junit)
-    androidTestImplementation(libs.androidx.espresso.core)
+}
+afterEvaluate {
+    publishing {
+        publications {
+            create<MavenPublication>("release") {
+                from(components["release"])
+
+                groupId = "com.github.ankurupadhyay"
+                artifactId = "myTestUI"
+                version = "1.0"
+            }
+        }
+    }
 }
